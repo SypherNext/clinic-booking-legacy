@@ -1,0 +1,64 @@
+name: CI
+
+# Checks every copy of the app in this repository: the starting point, each lesson step
+# and the finished app. Each folder is its own project with its own package-lock.json.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        folder:
+          - start
+          - steps/05-milestone-your-first-small-fix
+          - steps/06-saying-clearly-what-you-want
+          - steps/07-make-a-plan-before-changing-code
+          - steps/08-let-tests-guide-the-work
+          - steps/09-fixing-bugs-together
+          - steps/10-milestone-add-a-feature-with-tests
+          - steps/11-checking-ai-code-carefully
+          - steps/12-cleaning-up-old-code-safely
+          - steps/13-project-rules-the-assistant-follows
+          - steps/14-working-in-a-bigger-codebase
+          - steps/15-staying-safe-secrets-tricks-and-fake-packages
+          - steps/16-ai-help-in-code-review
+          - steps/17-capstone-ship-a-feature-from-idea-to-merge
+          - app
+    defaults:
+      run:
+        working-directory: ${{ matrix.folder }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: ${{ matrix.folder }}/package-lock.json
+
+      - run: npm ci
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm test

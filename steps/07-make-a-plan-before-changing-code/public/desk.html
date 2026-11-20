@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Harbor Street Clinic: Front desk</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="top">
+      <div class="brand">Harbor Street Clinic</div>
+      <div class="tag">Front desk</div>
+      <a href="/">Booking page</a>
+    </header>
+
+    <main>
+      <section class="card">
+        <h1>Day report</h1>
+        <form id="report-form" class="row">
+          <label>Date
+            <input id="date" type="date" />
+          </label>
+          <label>Desk token
+            <input id="token" type="password" autocomplete="off" />
+          </label>
+          <div class="actions">
+            <button type="submit">Show report</button>
+            <button type="button" id="csv" class="ghost">Download CSV</button>
+          </div>
+        </form>
+        <p id="message" class="message" role="status"></p>
+        <p id="totals" class="muted"></p>
+        <table class="list">
+          <thead>
+            <tr><th>Time</th><th>Doctor</th><th>Patient</th><th>Phone</th><th>Status</th></tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </section>
+    </main>
+
+    <script src="/desk.js"></script>
+  </body>
+</html>
